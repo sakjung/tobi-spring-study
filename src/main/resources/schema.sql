@@ -1,4 +1,4 @@
-set mode MySQL;
+-- set mode MySQL;
 
 DROP TABLE IF EXISTS users;
 
