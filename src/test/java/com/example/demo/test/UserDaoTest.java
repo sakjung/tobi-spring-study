@@ -3,6 +3,7 @@ package com.example.demo.test;
 import com.example.demo.dao.DaoFactory;
 import com.example.demo.dao.UserDao;
 import com.example.demo.domain.User;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
@@ -27,5 +28,19 @@ public class UserDaoTest {
         System.out.println(userSaved.getName());
         System.out.println(userSaved.getPassword());
         System.out.println(userSaved.getId() + "조회 성공!");
+    }
+
+    @Test
+    void daoFactoryVersusApplicationContext() {
+        DaoFactory daoFactory = new DaoFactory();
+        System.out.println("##### DAOFACTORY");
+        System.out.println(daoFactory.userDao());
+        System.out.println(daoFactory.userDao());
+        System.out.println();
+
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
+        System.out.println("##### APPLICATION CONTEXT");
+        System.out.println(context.getBean("userDao", UserDao.class));
+        System.out.println(context.getBean("userDao", UserDao.class));
     }
 }
