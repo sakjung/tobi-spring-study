@@ -8,7 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDao {
-    private final ConnectionMaker connectionMaker;
+    private ConnectionMaker connectionMaker;
+
+    public UserDao() {
+    }
 
     public UserDao(ConnectionMaker connectionMaker) {
         this.connectionMaker = connectionMaker;
@@ -61,5 +64,9 @@ public class UserDao {
         c.close();
 
         return user;
+    }
+
+    public void setConnectionMaker(final ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
     }
 }
