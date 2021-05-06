@@ -6,10 +6,10 @@ import com.example.demo.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class UserDaoTest {
     @Test
@@ -34,6 +34,17 @@ public class UserDaoTest {
         System.out.println(userSaved.getPassword());
         System.out.println(userSaved.getId() + "조회 성공!");
         System.out.println();
+    }
+
+    @Test
+    void wow() {
+        AnnotationConfigApplicationContext context1 = new AnnotationConfigApplicationContext(DaoFactory.class);
+        ApplicationContext context2 = new GenericXmlApplicationContext("daoContext.xml");
+
+        String[] beanDefinitionNames1 = context1.getBeanDefinitionNames();
+        String[] beanDefinitionNames2 = context2.getBeanDefinitionNames();
+        System.out.println(Arrays.toString(beanDefinitionNames1));
+        System.out.println(Arrays.toString(beanDefinitionNames2));
     }
 
     @Test

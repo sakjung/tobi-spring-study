@@ -2,23 +2,24 @@ package com.example.demo.dao;
 
 import com.example.demo.domain.User;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDao {
-    private ConnectionMaker connectionMaker;
+    private DataSource dataSource;
 
     public UserDao() {
     }
 
-    public UserDao(ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
+    public UserDao(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
-    public void create() throws ClassNotFoundException, SQLException {
-        Connection c = connectionMaker.makeConnection();
+    public void create() throws SQLException {
+        Connection c = dataSource.getConnection();
 
         PreparedStatement ps1 = c.prepareStatement("DROP TABLE IF EXISTS users");
         PreparedStatement ps2 = c.prepareStatement("CREATE TABLE users (id varchar(10) primary key, name varchar(20) not null, password VARCHAR(10) not null)");
@@ -31,8 +32,8 @@ public class UserDao {
         c.close();
     }
 
-    public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection c = connectionMaker.makeConnection();
+    public void add(User user) throws SQLException {
+        Connection c = dataSource.getConnection();
 
         PreparedStatement ps = c.prepareStatement(
                 "insert into users(id, name, password) values (?,?,?)");
@@ -46,8 +47,8 @@ public class UserDao {
         c.close();
     }
 
-    public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection c = connectionMaker.makeConnection();
+    public User get(String id) throws SQLException {
+        Connection c = dataSource.getConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
         ps.setString(1, id);
@@ -66,7 +67,7 @@ public class UserDao {
         return user;
     }
 
-    public void setConnectionMaker(final ConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
+    public void setDataSource(final DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }
