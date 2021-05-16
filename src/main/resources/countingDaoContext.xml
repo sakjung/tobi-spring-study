@@ -3,9 +3,9 @@
 <!--       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
 <!--       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">-->
 
-<!--    <bean id="realConnectionMaker" class="com.example.demo.dao.DConnectionMaker" />-->
+<!--    <bean id="realConnectionMaker" class="com.example.demo.connection.DConnectionMaker" />-->
 
-<!--    <bean id="connectionMaker" class="com.example.demo.dao.CountingConnectionMaker">-->
+<!--    <bean id="connectionMaker" class="com.example.demo.connection.CountingConnectionMaker">-->
 <!--        <property name="realConnectionMaker" ref="realConnectionMaker" />-->
 <!--    </bean>-->
 

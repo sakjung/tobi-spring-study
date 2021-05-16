@@ -1,10 +1,10 @@
 package com.example.demo.dao;
 
+import com.example.demo.connection.ConnectionMaker;
+import com.example.demo.connection.CountingConnectionMaker;
+import com.example.demo.connection.DConnectionMaker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-
-import javax.sql.DataSource;
 
 @Configuration
 public class CountingDaoFactory {

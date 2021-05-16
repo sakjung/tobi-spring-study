@@ -1,6 +1,6 @@
 package com.example.demo.test;
 
-import com.example.demo.dao.CountingConnectionMaker;
+import com.example.demo.connection.CountingConnectionMaker;
 import com.example.demo.dao.CountingDaoFactory;
 import com.example.demo.dao.UserDao;
 import com.example.demo.domain.User;
