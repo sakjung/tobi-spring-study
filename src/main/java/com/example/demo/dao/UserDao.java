@@ -67,13 +67,55 @@ public class UserDao {
         return user;
     }
 
+    public int getCount() throws SQLException {
+        Connection c = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            c = dataSource.getConnection();
+            ps = c.prepareStatement("SELECT count(*) FROM users");
+            ps.executeUpdate();
+
+            rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            System.out.println("EXCEPTION");
+            throw e;
+        } finally {
+            // close 는 만들어준 순서 (c - ps - rs) 의 반대로 하는 것이 원칙
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    System.out.println("resultSet close failed");
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    System.out.println("preparedStatement close failed");
+                }
+            }
+            if (c != null) {
+                try {
+                    c.close();
+                } catch (SQLException e) {
+                    System.out.println("connection close failed");
+                }
+            }
+        }
+    }
+
     public void deleteAll() throws SQLException {
         Connection c = null;
         PreparedStatement ps = null;
 
         try {
             c = dataSource.getConnection();
-            ps = c.prepareStatement("delete from users");
+            ps = c.prepareStatement("DELETE FROM users");
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("EXCEPTION");
