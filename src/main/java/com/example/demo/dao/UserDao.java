@@ -68,15 +68,31 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        Connection c = dataSource.getConnection();
+        Connection c = null;
+        PreparedStatement ps = null;
 
-        PreparedStatement ps = c.prepareStatement("delete from users");
-        ps.executeUpdate();
-
-        // 여기서 끊기면 close 못함
-
-        ps.close();
-        c.close();
+        try {
+            c = dataSource.getConnection();
+            ps = c.prepareStatement("delete from users");
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("EXCEPTION");
+        } finally {
+            if (ps != null) {
+                try { // 밑에 있는 c.close를 위해 try catch 처리 해줌
+                    ps.close();
+                } catch (SQLException e) {
+                    System.out.println("preparedStatement close failed");
+                }
+            }
+            if (c != null) {
+                try { // 얘는 그냥 함
+                    c.close();
+                } catch (SQLException e) {
+                    System.out.println("connection close failed");
+                }
+            }
+        }
     }
 
     public void setDataSource(final DataSource dataSource) {
