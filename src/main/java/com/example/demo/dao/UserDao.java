@@ -116,7 +116,8 @@ public abstract class UserDao {
         try {
             c = dataSource.getConnection();
 
-            ps = makeStatement(c); // 변하는 부분을 메소드로 추출
+            StatementStrategy strategy = new DeleteAllStatement();
+            ps = strategy.makePreparedStatement(c);
 
             ps.executeUpdate();
         } catch (SQLException e) {
