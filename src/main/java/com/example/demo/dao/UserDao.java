@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDao {
+public abstract class UserDao {
     private DataSource dataSource;
 
     public UserDao() {
@@ -115,7 +115,9 @@ public class UserDao {
 
         try {
             c = dataSource.getConnection();
-            ps = c.prepareStatement("DELETE FROM users");
+
+            ps = makeStatement(c); // 변하는 부분을 메소드로 추출
+
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("EXCEPTION");
@@ -136,6 +138,8 @@ public class UserDao {
             }
         }
     }
+
+    protected abstract PreparedStatement makeStatement(final Connection c) throws SQLException;
 
     public void setDataSource(final DataSource dataSource) {
         this.dataSource = dataSource;
