@@ -32,17 +32,13 @@ public class UserDao {
         c.close();
     }
 
-    public void add(User user) throws SQLException {
+    // user를 반드시 final 선언 -> 왜?
+    public void add(final User user) throws SQLException {
         // 나는 로컬 클래스
         class AddStatement implements StatementStrategy {
-            User user;
-
-            public AddStatement(final User user) {
-                this.user = user;
-            }
-
             @Override
             public PreparedStatement makePreparedStatement(final Connection c) throws SQLException {
+                // 인스턴스 변수와 생성자 이제 불필요
                 PreparedStatement ps = c.prepareStatement("INSERT INTO users(id, name, password) values(?, ?, ?)");
                 ps.setString(1, user.getId());
                 ps.setString(2, user.getName());
@@ -52,7 +48,7 @@ public class UserDao {
             }
         }
 
-        StatementStrategy st = new AddStatement(user);
+        StatementStrategy st = new AddStatement(); // uesr 안받아도 됨
         jdbcContextWithStatementStrategy(st);
     }
 
