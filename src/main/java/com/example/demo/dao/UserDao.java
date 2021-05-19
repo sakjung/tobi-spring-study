@@ -34,22 +34,21 @@ public class UserDao {
 
     // user를 반드시 final 선언 -> 왜?
     public void add(final User user) throws SQLException {
-        // 나는 로컬 클래스
-        class AddStatement implements StatementStrategy {
-            @Override
-            public PreparedStatement makePreparedStatement(final Connection c) throws SQLException {
-                // 인스턴스 변수와 생성자 이제 불필요
-                PreparedStatement ps = c.prepareStatement("INSERT INTO users(id, name, password) values(?, ?, ?)");
-                ps.setString(1, user.getId());
-                ps.setString(2, user.getName());
-                ps.setString(3, user.getPassword());
+        // 나는 로컬 익명 클래스
+        // 익명 내부 클래스는 구현하는 인터페이스를 생성자처럼 이용해서 오브젝트로 만든다
+        jdbcContextWithStatementStrategy(
+                new StatementStrategy() {
+                    @Override
+                    public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+                        PreparedStatement ps = c.prepareStatement("INSERT INTO users(id, name, password) values(?, ?, ?)");
+                        ps.setString(1, user.getId());
+                        ps.setString(2, user.getName());
+                        ps.setString(3, user.getPassword());
 
-                return ps;
-            }
-        }
-
-        StatementStrategy st = new AddStatement(); // uesr 안받아도 됨
-        jdbcContextWithStatementStrategy(st);
+                        return ps;
+                    }
+                }
+        );
     }
 
     public User get(String id) throws SQLException {
@@ -116,8 +115,14 @@ public class UserDao {
 
     // 나는 클라이언트
     public void deleteAll() throws SQLException {
-        StatementStrategy st = new DeleteAllStatement();
-        jdbcContextWithStatementStrategy(st); // st를 DI!
+        jdbcContextWithStatementStrategy(
+                new StatementStrategy() {
+                    @Override
+                    public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+                        return c.prepareStatement("DELETE FROM users");
+                    }
+                }
+        );
     }
 
     public void jdbcContextWithStatementStrategy(StatementStrategy stmt) throws SQLException {
